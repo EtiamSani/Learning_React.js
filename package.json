@@ -1,0 +1,24 @@
+{
+  "name": "project-adopte-me-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format":"prettier --write \"src/**/*.{js,jsx}\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EtiamSani/Project-adopte-me-REACT.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EtiamSani/Project-adopte-me-REACT/issues"
+  },
+  "homepage": "https://github.com/EtiamSani/Project-adopte-me-REACT#readme",
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
+}
