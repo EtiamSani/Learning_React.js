@@ -22,9 +22,13 @@ class Carousel extends Component {
     const { images } = this.props;
 
     return (
-      <div className="carousel">
-        <img src={images[active]} alt="animal hero" />
-        <div className="carousel-smaller">
+      <div className="ml-20 ">
+        <img
+          className="w-42 h-42 grid"
+          src={images[active]}
+          alt="animal hero"
+        />
+        <div className="my-5 flex w-20 ">
           {images.map((photo, index) => (
             <img
               onClick={this.handleIndexClick}
