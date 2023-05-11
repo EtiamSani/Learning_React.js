@@ -1,5 +1,3 @@
-// une autre façon de coder en utilisant les classe aulieu des hooks
-
 import { Component } from "react";
 
 class Carousel extends Component {
@@ -11,32 +9,28 @@ class Carousel extends Component {
     images: ["http://pets-images.dev-apis.com/pets/none.jpg"],
   };
 
-  handleIndexClick = (e) => {
+  handleIndexClick = (event) => {
     this.setState({
-      // le + convertie un string dans un nombre
-      active: +e.target.dataset.index,
+      active: +event.target.dataset.index,
     });
   };
+
   render() {
     const { active } = this.state;
     const { images } = this.props;
-
     return (
-      <div className="ml-20 ">
-        <img
-          className="w-42 h-42 grid"
-          src={images[active]}
-          alt="animal hero"
-        />
-        <div className="my-5 flex w-20 ">
+      <div className="carousel">
+        <img src={images[active]} alt="animal" />
+        <div className="carousel-smaller">
           {images.map((photo, index) => (
+            // eslint-disable-next-line
             <img
-              onClick={this.handleIndexClick}
-              data-index={index}
               key={photo}
               src={photo}
               className={index === active ? "active" : ""}
               alt="animal thumbnail"
+              onClick={this.handleIndexClick}
+              data-index={index}
             />
           ))}
         </div>

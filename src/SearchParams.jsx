@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Results from "./Results";
-import fetchSearch from "./fetchSearch";
+import AdoptedPetContext from "./AdoptedPetContext";
 import useBreedList from "./useBreedList";
-import AdoptedPetContex from "./AdoptedPetContext";
+import fetchSearch from "./fetchSearch";
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -12,17 +12,16 @@ const SearchParams = () => {
     animal: "",
     breed: "",
   });
+  const [adoptedPet] = useContext(AdoptedPetContext);
   const [animal, setAnimal] = useState("");
   const [breeds] = useBreedList(animal);
-  const [adoptedPet, _] = useContext(AdoptedPetContex);
 
   const results = useQuery(["search", requestParams], fetchSearch);
   const pets = results?.data?.pets ?? [];
 
   return (
-    <div className="my-0 mx-auto w-11/12">
+    <div className="search-params">
       <form
-        className="mb-10 flex flex-col items-center justify-center rounded-lg bg-gray-200 p-10 shadow-lg"
         onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.target);
@@ -31,7 +30,6 @@ const SearchParams = () => {
             breed: formData.get("breed") ?? "",
             location: formData.get("location") ?? "",
           };
-
           setRequestParams(obj);
         }}
       >
@@ -42,47 +40,43 @@ const SearchParams = () => {
         ) : null}
         <label htmlFor="location">
           Location
-          <input
-            type="text"
-            name="animal"
-            className="search-input"
-            id="location"
-            placeholder="location"
-          />
+          <input id="location" name="location" placeholder="Location" />
         </label>
+
         <label htmlFor="animal">
           Animal
           <select
-            className="search-input"
             id="animal"
-            value={animal}
+            name="animal"
             onChange={(e) => {
+              setAnimal(e.target.value);
+            }}
+            onBlur={(e) => {
               setAnimal(e.target.value);
             }}
           >
             <option />
             {ANIMALS.map((animal) => (
-              <option key={animal}>{animal}</option>
+              <option key={animal} value={animal}>
+                {animal}
+              </option>
             ))}
           </select>
         </label>
+
         <label htmlFor="breed">
           Breed
-          <select
-            className="search-input rayed-out-disabled"
-            id="breed"
-            disabled={breeds.length === 0}
-            name="breed"
-          >
+          <select disabled={!breeds.length} id="breed" name="breed">
             <option />
             {breeds.map((breed) => (
-              <option key={breed}>{breed}</option>
+              <option key={breed} value={breed}>
+                {breed}
+              </option>
             ))}
           </select>
         </label>
-        <button className="rounded border-none bg-orange-500 px-6 py-2 text-white hover:opacity-50">
-          Submit
-        </button>
+
+        <button>Submit</button>
       </form>
       <Results pets={pets} />
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 const Modal = ({ children }) => {
@@ -10,9 +10,9 @@ const Modal = ({ children }) => {
   useEffect(() => {
     const modalRoot = document.getElementById("modal");
     modalRoot.appendChild(elRef.current);
-    // Pour enlever un element du DOM.
     return () => modalRoot.removeChild(elRef.current);
   }, []);
+
   return createPortal(<div>{children}</div>, elRef.current);
 };
 

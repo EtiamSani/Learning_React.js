@@ -1,10 +1,10 @@
-import { createRoot } from "react-dom/client";
-import { Link, BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Details from "./Details";
-import SearchParams from "./SearchParams";
-import { useState } from "react";
-import AdoptedPetContex from "./AdoptedPetContext";
+import { useState, lazy, Suspense } from "react";
+import AdoptedPetContext from "./AdoptedPetContext";
+
+const Details = lazy(() => import("./Details"));
+const SearchParams = lazy(() => import("./SearchParams"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,31 +18,28 @@ const queryClient = new QueryClient({
 const App = () => {
   const adoptedPet = useState(null);
   return (
-    <div
-      className="m-0 p-0"
-      style={{
-        background: "url(https://pets-images.dev-apis.com/pets/wallpaperA.jpg)",
-      }}
-    >
-      <BrowserRouter>
+    <div>
+      <AdoptedPetContext.Provider value={adoptedPet}>
         <QueryClientProvider client={queryClient}>
-          <AdoptedPetContex.Provider value={adoptedPet}>
-            <header className="mb-10 w-full bg-gradient-to-b from-yellow-400 via-orange-500 to-red-500 p-7 text-center">
-              <Link className="text-6xl text-white hover:text-gray-200" to="/">
-                Adopt Me !
-              </Link>
+          <Suspense
+            fallback={
+              <div className="loading-pane">
+                <h2 className="loader">🐶</h2>
+              </div>
+            }
+          >
+            <header>
+              <Link to="/">Adopt Me!</Link>
             </header>
             <Routes>
               <Route path="/details/:id" element={<Details />} />
               <Route path="/" element={<SearchParams />} />
             </Routes>
-          </AdoptedPetContex.Provider>
+          </Suspense>
         </QueryClientProvider>
-      </BrowserRouter>
+      </AdoptedPetContext.Provider>
     </div>
   );
 };
 
-const container = document.getElementById("root");
-const root = createRoot(container);
-root.render(<App />);
+export default App;
